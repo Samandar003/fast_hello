@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: gcr.io/YOUR_PROJECT_ID/flask-hello-world:latest  # Replace with your image
+          image: 18c336445927/my_priv_repo:latest  # Replace with your image
           ports:
             - containerPort: 5000  # Flask default port
 ---
@@ -41,7 +41,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: flask-app.YOUR_DOMAIN.com  # Replace with your domain or external IP
+  - host: flask-app.unknown.com  # Replace with your domain or external IP
     http:
       paths:
       - path: /
