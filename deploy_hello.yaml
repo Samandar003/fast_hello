@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+spec:
+  replicas: 2  # Number of pods to run
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+        - name: flask-app
+          image: gcr.io/YOUR_PROJECT_ID/flask-hello-world:latest  # Replace with your image
+          ports:
+            - containerPort: 5000  # Flask default port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    app: flask  # Matches the deployment label
+  ports:
+    - protocol: TCP
+      port: 80         # Expose service on port 80
+      targetPort: 5000  # Flask app listens on port 5000
+  type: LoadBalancer  # Exposes the service externally with a public IP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: flask-app.YOUR_DOMAIN.com  # Replace with your domain or external IP
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: flask-service
+            port:
+              number: 80
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-config
+data:
+  FLASK_ENV: "production"
+  FLASK_DEBUG: "0"
+
