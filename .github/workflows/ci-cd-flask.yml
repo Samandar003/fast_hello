@@ -9,7 +9,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: 	jx-rocks    # Add your cluster name here.
-  GKE_ZONE: us-central1-c   # Add your cluster zone here.
+  GKE_ZONE: us-east1-b    # Add your cluster zone here.
   DEPLOYMENT_NAME: flask-salom # Add your deployment name here.
   IMAGE: flask-image
 
