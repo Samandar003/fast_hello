@@ -1,3 +1,4 @@
+
 name: Build and Deploy to GKE
 
 on:
@@ -11,6 +12,7 @@ env:
   GKE_ZONE: ${{env.GKE_ZONE}}   # Add your cluster zone here.
   DEPLOYMENT_NAME: flask-salom # Add your deployment name here.
   IMAGE: flask-image
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
 
 jobs:
   setup-build-publish-deploy:
@@ -21,6 +23,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    # Authenticate with Docker Hub
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
@@ -49,16 +55,18 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
-    # Push the Docker image to Google Container Registry
+    # Push the Docker image to Dockerhub
     - name: Publish
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        docker push "docker.io/${{ env.DOCKERHUB_USERNAME }}/$IMAGE:$GITHUB_SHA"
 
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
+
+    # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
         ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
