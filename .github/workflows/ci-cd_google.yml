@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: dulcet-radar-402320
   GKE_CLUSTER: 	jx-rocks    # Add your cluster name here.
   GKE_ZONE: us-east1-b   # Add your cluster zone here.
   DEPLOYMENT_NAME: flask-salom # Add your deployment name here.
