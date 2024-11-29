@@ -27,7 +27,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-service
+  name: flask-service-demo
 spec:
   selector:
     app: flask-app
@@ -48,12 +48,12 @@ metadata:
 spec:
   rules:
   # - host: flask-app.example.com # Replace with your domain
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: flask-service
+            name: flask-service-demo
             port:
               number: 80
