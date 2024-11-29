@@ -1,0 +1,7 @@
+resources:
+  - fast_deployment.yaml
+
+images:
+  - name: docker.io/18c336445927/flask-image
+    newName: docker.io/18c336445927/flask-image
+    newTag: latest
