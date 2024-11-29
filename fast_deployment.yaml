@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-container
-        image: docker.io/your-dockerhub-username/flask-image:latest # Replace with your actual image
+        image: docker.io/18c336445927/flask-image:latest # Replace with your actual image
         ports:
         - containerPort: 5000
         env:
